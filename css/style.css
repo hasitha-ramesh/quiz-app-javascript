@@ -1,71 +1,267 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Times New Roman', Times, serif;
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap');
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-body{
-    background-color: #a7a7a7;
+
+:root {
+  --purple-50:  #EEEDFE;
+  --purple-200: #AFA9EC;
+  --purple-600: #534AB7;
+  --purple-800: #3C3489;
+  --purple-900: #26215C;
+  --green-50:  #EAF3DE;
+  --green-600: #3B6D11;
+  --green-900: #173404;
+  --red-50:  #FCEBEB;
+  --red-600: #A32D2D;
+  --red-900: #501313;
+  --gray-100: #F5F4F2;
+  --gray-200: #E8E6E1;
+  --gray-400: #9B9A96;
+  --gray-700: #444441;
+  --gray-900: #1A1A18;
+  --font-sans: 'DM Sans', sans-serif;
+  --font-serif: 'DM Serif Display', serif;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05);
 }
-.app{
-    background: #fff;
-    width: 90%;
-    max-width:600px;
-    margin: 50px auto 0px;
-    padding: 30px;
-    border-radius: 20px;
+
+body {
+  font-family: var(--font-sans);
+  background-color: #F0EEE9;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 48px 16px 64px;
 }
-.app h1{
-    font-size: 25px;
-    color: #2b2b2b;
-    font-weight: 600;
-    padding-bottom: 30px;
-    border-bottom: 1px solid #b3b3b3;
+
+.app {
+  background: #fff;
+  width: 100%;
+  max-width: 560px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
 }
-.quiz{
-    padding: 20px 0;
+
+/* Header strip */
+.app > h1 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+  color: #fff;
+  background: var(--purple-600);
+  padding: 22px 28px;
+  letter-spacing: -0.01em;
 }
-.quiz h2{
-    font-size: 20px;
-    color: #2b2b2b;
-    font-weight: 600;
+
+/* Quiz body */
+.quiz {
+  padding: 28px 28px 32px;
 }
-.btn{
-    width: 100%;
-    padding: 10px;
-    background: #fff;
-    color: #2b2b2b;
-    margin: 10px 0;
-    border: 1px solid #454545;
-    text-align: left;
-    font-weight: 500;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
+
+/* Progress bar — add this div in your HTML just after .quiz opens:
+   <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+   Control width via JS: document.getElementById('progress-fill').style.width = '50%';
+*/
+.progress-bar {
+  height: 3px;
+  background: var(--gray-200);
+  border-radius: 99px;
+  margin-bottom: 24px;
+  overflow: hidden;
 }
-.btn:hover:not([disabled]){
-    background: #2b2b2b;
-    color: #fff;
+.progress-fill {
+  height: 100%;
+  background: var(--purple-600);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+  width: 0%;
 }
-.btn:disabled{
-    cursor: not-allowed;
+
+/* Step counter — add <p class="step-label" id="step-label">Question 1 of 4</p> */
+.step-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-400);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
 }
-#next-btn{
-    padding: 10px;
-    background: #0442a7;
-    color: #fff;
-    border-radius: 10px;
-    border: none;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    width: 120px;
-    margin: 20px auto 0px; 
-    display: none;
+
+/* Question */
+.quiz h2 {
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--gray-900);
+  line-height: 1.5;
+  margin-bottom: 24px;
+  min-height: 56px;
 }
-.correct{
-    background: #9aeabc;
+
+/* Answer buttons */
+#answer-btns {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 24px;
 }
-.incorrect{
-    background: #ff9393;
+
+.btn {
+  width: 100%;
+  padding: 13px 16px;
+  background: #fff;
+  color: var(--gray-900);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s, box-shadow 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  line-height: 1.4;
+}
+
+/* Optional: letter badges — wrap answer text like:
+   <span class="opt-label">A</span> Answer text
+*/
+.opt-label {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-400);
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.btn:hover:not([disabled]) {
+  background: var(--gray-100);
+  border-color: var(--gray-400);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn.correct {
+  background: var(--green-50);
+  border-color: var(--green-600);
+  color: var(--green-900);
+}
+
+.btn.correct .opt-label {
+  background: var(--green-600);
+  border-color: var(--green-600);
+  color: #fff;
+}
+
+.btn.incorrect {
+  background: var(--red-50);
+  border-color: var(--red-600);
+  color: var(--red-900);
+}
+
+.btn.incorrect .opt-label {
+  background: var(--red-600);
+  border-color: var(--red-600);
+  color: #fff;
+}
+
+/* Next button */
+#next-btn {
+  display: none;
+  padding: 12px 28px;
+  background: var(--purple-600);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  float: right;
+  transition: background 0.15s, transform 0.1s;
+  letter-spacing: 0.01em;
+}
+
+#next-btn:hover {
+  background: var(--purple-800);
+  transform: translateY(-1px);
+}
+
+#next-btn:active {
+  transform: scale(0.97);
+}
+
+/* Score / result screen */
+.score-screen {
+  text-align: center;
+  padding: 12px 0 8px;
+}
+
+.score-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--purple-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 30px;
+}
+
+.score-number {
+  font-family: var(--font-serif);
+  font-size: 56px;
+  font-weight: 400;
+  color: var(--purple-600);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.score-total {
+  font-size: 13px;
+  color: var(--gray-400);
+  margin-bottom: 6px;
+}
+
+.score-title {
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--gray-900);
+  margin-bottom: 4px;
+}
+
+.score-sub {
+  font-size: 14px;
+  color: var(--gray-400);
+  margin-bottom: 24px;
+}
+
+/* Clearfix after next-btn float */
+.quiz::after {
+  content: '';
+  display: block;
+  clear: both;
 }
